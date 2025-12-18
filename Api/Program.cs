@@ -1,4 +1,5 @@
 using Application.Interfaces;
+using Application.Mappings;
 using Application.Middleware;
 using Application.Services;
 using Application.Validators;
@@ -28,6 +29,7 @@ builder.Services.AddScoped<IEligibilityRepository, EligibilityRepository>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEligibilityService, EligibilityService>();
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]!);
 builder.Services.AddAuthentication(x =>

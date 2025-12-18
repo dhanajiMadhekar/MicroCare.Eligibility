@@ -1,5 +1,6 @@
 ﻿using Application.DTOs;
 using Application.Interfaces;
+using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
 using System;
@@ -13,17 +14,19 @@ namespace Application.Services
     public class EligibilityService : IEligibilityService
     {
         private readonly IEligibilityRepository _repository;
+        private readonly IMapper _mapper;
 
-        public EligibilityService(IEligibilityRepository repository)
+        public EligibilityService(IEligibilityRepository repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<EligibilityResponseDto>> SearchAsync(EligibilitySearchDto search)
         {
             var entities = await _repository.GetAllAsync(search);
 
-            return entities.Select(e => MapToDto(e));
+            return _mapper.Map<IEnumerable<EligibilityResponseDto>>(entities);
         }
 
         public async Task<EligibilityResponseDto?> GetByIdAsync(int id)
@@ -31,62 +34,22 @@ namespace Application.Services
             var entity = await _repository.GetByIdAsync(id);
             if (entity == null) return null;
 
-            return MapToDto(entity);
+            return _mapper.Map<EligibilityResponseDto>(entity);
         }
 
         public async Task<EligibilityResponseDto> CreateAsync(CreateEligibilityDto dto)
         {
-            var entity = new EligibilityRequest
-            {
-                Payer = dto.Payer,
-                RequestDate = DateTime.Now,
-                Status = RequestStatus.Pending,
-                PatientName = dto.PatientName,
-                DocumentType = dto.DocumentType,
-                DocumentNumber = dto.DocumentNumber,
-                DateOfBirth = dto.DateOfBirth,
-                Gender = dto.Gender,
-                PolicyHolderName = dto.PolicyHolderName,
-                PolicyNumber = dto.PolicyNumber,
-                MaritalStatus = dto.MaritalStatus,
-                MobileNumber = dto.MobileNumber,
-                IsReferral = dto.IsReferral,
-                IsNewBorn = dto.IsNewBorn,
-                ClassName = dto.ClassName,
-                ExpiryDate = dto.ExpiryDate,
-                MRN = dto.MRN,
-                ApprovalLimit = dto.ApprovalLimit,
-                Deductibles = dto.Deductibles,
-                Purpose = dto.Purpose,
-                CreatedDate = DateTime.Now
-            };
+            var entity = _mapper.Map<EligibilityRequest>(dto);
 
             var savedEntity = await _repository.AddAsync(entity);
 
-            return MapToDto(savedEntity);
+            return _mapper.Map<EligibilityResponseDto>(savedEntity);
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
             await _repository.DeleteAsync(id);
             return true;
-        }
-
-        private static EligibilityResponseDto MapToDto(EligibilityRequest entity)
-        {
-            return new EligibilityResponseDto
-            {
-                Id = entity.Id,
-                Payer = entity.Payer,
-                RequestDate = entity.RequestDate.ToString("yyyy-MM-dd"),
-                Status = entity.Status.ToString(),
-                PatientName = entity.PatientName,
-                DocumentType = entity.DocumentType,
-                DocumentNumber = entity.DocumentNumber,
-                PolicyNumber = entity.PolicyNumber,
-                IsNewBorn = entity.IsNewBorn ?? false,
-                IsReferral = entity.IsReferral ?? false
-            };
         }
     }
 }
