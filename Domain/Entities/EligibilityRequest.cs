@@ -26,8 +26,15 @@ namespace Domain.Entities
         public MaritalStatus? MaritalStatus { get; set; }
 
         public string? MobileNumber { get; set; }
-        public bool IsReferral { get; set; }
-        public bool IsNewBorn { get; set; }
+        public bool? IsReferral { get; set; }
+        public bool? IsNewBorn { get; set; }
+
+        public string? ClassName { get; set; }
+        public DateTime? ExpiryDate { get; set; }
+        public string? MRN { get; set; }
+        public decimal? ApprovalLimit { get; set; }
+        public decimal? Deductibles { get; set; }
+        public string? Purpose { get; set; }
 
         public DateTime? PayerResponseDate { get; set; }
         public string? PayerResponseMessage { get; set; }
