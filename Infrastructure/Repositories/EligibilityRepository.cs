@@ -1,6 +1,7 @@
 ﻿using Application.DTOs;
 using Application.Interfaces;
 using Domain.Entities;
+using Domain.Enums;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -26,12 +27,27 @@ namespace Infrastructure.Repositories
 
             if (!string.IsNullOrEmpty(search.Payer))
                 query = query.Where(x => x.Payer == search.Payer);
+
             if (search.FromDate.HasValue)
                 query = query.Where(x => x.RequestDate >= search.FromDate.Value);
+
             if (search.ToDate.HasValue)
                 query = query.Where(x => x.RequestDate <= search.ToDate.Value);
+
+            if (!string.IsNullOrEmpty(search.DocumentType))
+                query = query.Where(x => x.DocumentType == search.DocumentType);
+
+            if (!string.IsNullOrEmpty(search.DocumentNumber))
+                query = query.Where(x => x.DocumentNumber.Contains(search.DocumentNumber));
+
             if (!string.IsNullOrEmpty(search.Status))
-                query = query.Where(x => x.Status.ToString() == search.Status);
+            {
+                if (Enum.TryParse<RequestStatus>(search.Status, true, out var statusEnum))
+                {
+                    query = query.Where(x => x.Status == statusEnum);
+                }
+            }
+
             if (!string.IsNullOrEmpty(search.PatientName))
                 query = query.Where(x => x.PatientName.Contains(search.PatientName));
 
