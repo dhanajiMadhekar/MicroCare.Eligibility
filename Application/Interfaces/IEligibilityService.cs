@@ -14,5 +14,6 @@ namespace Application.Interfaces
         Task<EligibilityResponseDto?> GetByIdAsync(int id);
         Task<EligibilityResponseDto> CreateAsync(CreateEligibilityDto dto);
         Task<bool> DeleteAsync(int id);
+        Task<EligibilityResponseDto> UpdateAsync(int id, CreateEligibilityDto dto);
     }
 }
