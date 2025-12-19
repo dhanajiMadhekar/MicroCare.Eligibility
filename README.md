@@ -47,10 +47,12 @@ MicroCare.Backend/
 ├── Domain/                      # Core Entities
 │   ├── Entities/
 │   └── Enums/
-└── Infrastructure/              # Database & Repositories
-    ├── Data/
-    ├── Migrations/
-    └── Repositories/
+├── Infrastructure/              # Database & Repositories
+│   ├── Data/
+│   ├── Migrations/
+│   └── Repositories/
+└── MicroCare.Tests/             # Unit Tests (xUnit)
+    └── Services/
 
 Prerequisites
 
@@ -76,16 +78,21 @@ Open Api/appsettings.json and update the connection string:
 
 Apply Database Migrations
 
-dotnet tool install –global dotnet-ef dotnet ef database update –project
-Infrastructure –startup-project Api
+Add-Migration InitialCreate -Project Infrastructure -StartupProject Api
+Update-Database -Project Infrastructure -StartupProject Api
 
 Run the Application
 
-cd Api dotnet run
-
+cd Api 
+dotnet run
 The API will start at: HTTP: http://localhost:5278
 
 Open: http://localhost:5278/swagger
+
+Run Tests
+To run the Unit Tests (xUnit + Moq) for the service layer:
+
+dotnet test
 
 Swagger Features Test endpoints from browser JWT authentication using
 Authorize button Interactive request and response models
