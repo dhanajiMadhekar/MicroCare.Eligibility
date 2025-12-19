@@ -41,8 +41,11 @@ namespace Application.Services
         {
             var entity = _mapper.Map<EligibilityRequest>(dto);
 
-            var savedEntity = await _repository.AddAsync(entity);
+            entity.Status = RequestStatus.Pending;
+            entity.RequestDate = DateTime.Now;
+            entity.CreatedDate = DateTime.Now;
 
+            var savedEntity = await _repository.AddAsync(entity);
             return _mapper.Map<EligibilityResponseDto>(savedEntity);
         }
 
