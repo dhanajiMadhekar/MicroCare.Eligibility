@@ -75,5 +75,11 @@ namespace Infrastructure.Repositories
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task UpdateAsync(EligibilityRequest request)
+        {
+            _context.EligibilityRequests.Update(request);
+            await _context.SaveChangesAsync();
+        }
     }
 }

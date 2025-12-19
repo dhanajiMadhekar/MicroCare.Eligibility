@@ -51,5 +51,22 @@ namespace Application.Services
             await _repository.DeleteAsync(id);
             return true;
         }
+
+        public async Task<EligibilityResponseDto> UpdateAsync(int id, CreateEligibilityDto dto)
+        {
+            var existingRequest = await _repository.GetByIdAsync(id);
+            if (existingRequest == null)
+            {
+                throw new KeyNotFoundException($"Request with ID {id} not found.");
+            }
+
+            _mapper.Map(dto, existingRequest);
+
+            existingRequest.ModifiedDate = DateTime.UtcNow;
+
+            await _repository.UpdateAsync(existingRequest);
+
+            return _mapper.Map<EligibilityResponseDto>(existingRequest);
+        }
     }
 }

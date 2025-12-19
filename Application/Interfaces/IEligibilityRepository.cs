@@ -14,5 +14,6 @@ namespace Application.Interfaces
         Task<EligibilityRequest?> GetByIdAsync(int id);
         Task<EligibilityRequest> AddAsync(EligibilityRequest request);
         Task DeleteAsync(int id);
+        Task UpdateAsync(EligibilityRequest request);
     }
 }
