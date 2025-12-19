@@ -15,13 +15,16 @@ namespace Application.Mappings
         public MappingProfile()
         {
             CreateMap<EligibilityRequest, EligibilityResponseDto>()
-                .ForMember(dest => dest.RequestDate, opt => opt.MapFrom(src => src.RequestDate.ToString("yyyy-MM-dd")))
-                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
+                .ForMember(dest => dest.RequestDate, opt => opt.MapFrom(src => src.RequestDate.ToString("yyyy-MM-dd")));
 
             CreateMap<CreateEligibilityDto, EligibilityRequest>()
-                .ForMember(dest => dest.RequestDate, opt => opt.MapFrom(src => DateTime.Now))
-                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => RequestStatus.Pending))
-                .ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(src => DateTime.Now));
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src =>
+                    string.IsNullOrEmpty(src.Status)
+                    ? RequestStatus.Pending
+                    : Enum.Parse<RequestStatus>(src.Status, true)))
+
+                .ForMember(dest => dest.RequestDate, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedDate, opt => opt.Ignore());
         }
     }
 }

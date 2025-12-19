@@ -30,5 +30,6 @@ namespace Application.DTOs
         public bool IsNewBorn { get; set; }
         public bool IsReferral { get; set; }
         public string? Purpose { get; set; }
+        public string? Status { get; set; }
     }
 }
