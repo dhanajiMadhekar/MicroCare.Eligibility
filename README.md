@@ -52,7 +52,7 @@ MicroCare.Backend/
 │   ├── Migrations/
 │   └── Repositories/
 └── MicroCare.Tests/             # Unit Tests (xUnit)
-    └── Services/
+    └── EligibilityServiceTests.cs
 
 Prerequisites
 
